@@ -3,9 +3,9 @@ package main
 import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
-	"go-mvc-api-server/pkg/controller"
-	"go-mvc-api-server/pkg/model"
-	"go-mvc-api-server/pkg/view"
+	"github.com/Tomoya113/go-mvc-api-server/pkg/controller"
+	"github.com/Tomoya113/go-mvc-api-server/pkg/model"
+	"github.com/Tomoya113/go-mvc-api-server/pkg/view"
 )
 
 func InitializeRouter() chi.Router {
