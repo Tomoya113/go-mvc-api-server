@@ -2,15 +2,15 @@
 package model
 
 import (
+	"github.com/Tomoya113/go-mvc-api-server/pkg/database"
+
 	"github.com/google/uuid"
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
 )
 
 type User struct {
-	Id    int    `json:"id"`
-	Name  string `json:"name"`
-	Email string `json:"email"`
+	Id    int
+	Name  string
+	Email string
 }
 
 type CreateUserParams struct {
@@ -19,36 +19,47 @@ type CreateUserParams struct {
 }
 
 type IUserModel interface {
-	GetUsers() []User
-	CreateUser(params CreateUserParams)
+	GetUsers() ([]User, error)
+	CreateUser(params CreateUserParams) (int, error)
+	GetUser(id int) (User, error)
 }
 
-type UserModel struct {
-	db *gorm.DB
-}
+type UserModel struct{}
 
 func NewUserModel() UserModel {
 	model := UserModel{}
-
-	const dsn = "root:password@tcp(127.0.0.1:3306)/go_mvc_api_server"
-	db, _ := gorm.Open(mysql.Open(dsn), &gorm.Config{})
-
-	model.db = db
 	return model
 }
 
-func (m UserModel) GetUsers() []User {
+func (m UserModel) GetUsers() ([]User, error) {
 	users := []User{}
-	m.db.Find(&users)
-	return users
+	err := database.Get().Find(&users).Error
+	if err == nil {
+		database.Get().Find(&users)
+	}
+
+	return users, err
 }
 
-func (m UserModel) CreateUser(params CreateUserParams) {
-	id := uuid.New().ID()
+func (m UserModel) CreateUser(params CreateUserParams) (id int, err error) {
+	id = int(uuid.New().ID())
 	user := User{
-		Id:    int(id),
+		Id:    id,
 		Name:  params.Name,
 		Email: params.Email,
 	}
-	m.db.Create(&user)
+	err = database.Get().Create(&user).Error
+
+	// err != nilにするとreturnを2回書く必要が出てきそうだったのでerr == nilにしました
+	if err == nil {
+		database.Get().Create(&user)
+	}
+	return id, err
+}
+
+func (m UserModel) GetUser(id int) (User, error) {
+	user := User{}
+	err := database.Get().First(&user, id).Error
+	database.Get().First(&user, id)
+	return user, err
 }
