@@ -1,4 +1,4 @@
-module go-mvc-api-server
+module github.com/Tomoya113/go-mvc-api-server
 
 go 1.17
 
