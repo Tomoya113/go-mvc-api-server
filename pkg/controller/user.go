@@ -15,11 +15,11 @@ type IUserController interface {
 }
 
 type UserController struct {
-	view  view.IUserView
-	model model.IUserModel
+	view  view.UserView
+	model model.UserModel
 }
 
-func NewUserController(view view.IUserView, model model.IUserModel) UserController {
+func NewUserController(view view.UserView, model model.UserModel) UserController {
 	controller := UserController{
 		view:  view,
 		model: model,
