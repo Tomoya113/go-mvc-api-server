@@ -8,14 +8,9 @@ import (
 )
 
 type UserResponse struct {
-	Id    int    `json:"id"`
+	ID    int    `json:"id"`
 	Name  string `json:"name"`
 	Email string `json:"email"`
-}
-
-type IUserView interface {
-	ConvertUsersToJson(users []model.User) ([]byte, error)
-	ConvertUserToJson(users model.User) ([]byte, error)
 }
 
 type UserView struct{}
@@ -29,7 +24,7 @@ func (v UserView) ConvertUsersToJson(users []model.User) ([]byte, error) {
 	var result = []UserResponse{}
 	for _, user := range users {
 		userResponse := UserResponse{
-			Id:    user.Id,
+			ID:    user.ID,
 			Name:  user.Name,
 			Email: user.Email,
 		}
@@ -41,7 +36,7 @@ func (v UserView) ConvertUsersToJson(users []model.User) ([]byte, error) {
 
 func (v UserView) ConvertUserToJson(user model.User) ([]byte, error) {
 	userResponse := UserResponse{
-		Id:    user.Id,
+		ID:    user.ID,
 		Name:  user.Name,
 		Email: user.Email,
 	}
