@@ -8,9 +8,11 @@ import (
 
 func main() {
 	r := InitializeRouter()
-	error := database.Init(nil)
-	if error != nil {
-		panic(error)
+	err := database.Init(nil)
+	if err != nil {
+		panic(err)
 	}
-	http.ListenAndServe(":3333", r)
+	if err := http.ListenAndServe(":3333", r); err != nil {
+		panic(err)
+	}
 }
