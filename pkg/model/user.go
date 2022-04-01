@@ -8,7 +8,7 @@ import (
 )
 
 type User struct {
-	Id    int
+	ID    int
 	Name  string
 	Email string
 }
@@ -16,12 +16,6 @@ type User struct {
 type CreateUserParams struct {
 	Name  string
 	Email string
-}
-
-type IUserModel interface {
-	GetUsers() ([]User, error)
-	CreateUser(params CreateUserParams) (int, error)
-	GetUser(id int) (User, error)
 }
 
 type UserModel struct{}
@@ -33,33 +27,32 @@ func NewUserModel() UserModel {
 
 func (m UserModel) GetUsers() ([]User, error) {
 	users := []User{}
-	err := database.Get().Find(&users).Error
-	if err == nil {
-		database.Get().Find(&users)
+	if err := database.Get().Find(&users).Error; err != nil {
+		return users, err
 	}
 
-	return users, err
+	return users, nil
 }
 
 func (m UserModel) CreateUser(params CreateUserParams) (id int, err error) {
 	id = int(uuid.New().ID())
 	user := User{
-		Id:    id,
+		ID:    id,
 		Name:  params.Name,
 		Email: params.Email,
 	}
-	err = database.Get().Create(&user).Error
-
-	// err != nilにするとreturnを2回書く必要が出てきそうだったのでerr == nilにしました
-	if err == nil {
-		database.Get().Create(&user)
+	if err = database.Get().Create(&user).Error; err != nil {
+		return id, err
 	}
-	return id, err
+
+	return id, nil
 }
 
 func (m UserModel) GetUser(id int) (User, error) {
 	user := User{}
-	err := database.Get().First(&user, id).Error
-	database.Get().First(&user, id)
-	return user, err
+	if err := database.Get().First(&user, id).Error; err != nil {
+		return user, err
+	}
+
+	return user, nil
 }
