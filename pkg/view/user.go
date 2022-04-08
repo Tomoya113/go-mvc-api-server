@@ -13,14 +13,7 @@ type UserResponse struct {
 	Email string `json:"email"`
 }
 
-type UserView struct{}
-
-func NewUserView() UserView {
-	view := UserView{}
-	return view
-}
-
-func (v UserView) ConvertUsersToJson(users []model.User) ([]byte, error) {
+func ConvertUsersToJson(users []model.User) ([]byte, error) {
 	var result = []UserResponse{}
 	for _, user := range users {
 		userResponse := UserResponse{
@@ -34,7 +27,7 @@ func (v UserView) ConvertUsersToJson(users []model.User) ([]byte, error) {
 	return b, err
 }
 
-func (v UserView) ConvertUserToJson(user model.User) ([]byte, error) {
+func ConvertUserToJson(user model.User) ([]byte, error) {
 	userResponse := UserResponse{
 		ID:    user.ID,
 		Name:  user.Name,
