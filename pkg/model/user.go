@@ -18,14 +18,7 @@ type CreateUserParams struct {
 	Email string
 }
 
-type UserModel struct{}
-
-func NewUserModel() UserModel {
-	model := UserModel{}
-	return model
-}
-
-func (m UserModel) GetUsers() ([]User, error) {
+func GetUsers() ([]User, error) {
 	users := []User{}
 	if err := database.Get().Find(&users).Error; err != nil {
 		return users, err
@@ -34,7 +27,7 @@ func (m UserModel) GetUsers() ([]User, error) {
 	return users, nil
 }
 
-func (m UserModel) CreateUser(params CreateUserParams) (id int, err error) {
+func CreateUser(params CreateUserParams) (id int, err error) {
 	id = int(uuid.New().ID())
 	user := User{
 		ID:    id,
@@ -48,7 +41,7 @@ func (m UserModel) CreateUser(params CreateUserParams) (id int, err error) {
 	return id, nil
 }
 
-func (m UserModel) GetUser(id int) (User, error) {
+func GetUser(id int) (User, error) {
 	user := User{}
 	if err := database.Get().First(&user, id).Error; err != nil {
 		return user, err
